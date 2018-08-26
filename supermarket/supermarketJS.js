@@ -1,6 +1,25 @@
 const httprequest = new XMLHttpRequest;
 const url = location.search.split("?");
 const id = url[1].split("=")[1];
+
+var countries;
+const http = new XMLHttpRequest();
+http.open("GET", "http://localhost:2000/getCountries");
+http.send();
+http.onreadystatechange = function () {
+    if (http.status === 200 && http.readyState === 4) {
+        countries = JSON.parse(http.responseText);
+        const countrySelect = document.getElementById("countrySelect");
+        for (let i = 0; i < countries.length; i++) {
+            const x = document.createElement("option");
+            x.value = countries[i].id;
+            x.innerHTML = countries[i].name;
+            countrySelect.appendChild(x);
+        }
+    }
+};
+
+
 httprequest.open("GET", "http://localhost:2000/getSupermarketById?id=" + id);
 httprequest.send();
 httprequest.onreadystatechange = function () {
@@ -16,6 +35,28 @@ httprequest.onreadystatechange = function () {
     }
 };
 
+function showLocationOverlay() {
+    on("locationOverlay");
+}
+
+function hideLocationOverlay() {
+    document.getElementById("locationOverlay").style.display = "none";
+}
+
+window.onclick = function (event) {
+    const overlay = document.getElementById("locationOverlay");
+    if (event.target === overlay) {
+        overlay.style.display = "none";
+    }
+};
+
+function on(name) {
+    document.getElementById(name).style.display = "block";
+}
+
+function off(name) {
+    document.getElementById(name).style.display = "none";
+}
 
 function items(prices) {
     let i;
@@ -193,7 +234,6 @@ function locations(locations) {
     document.getElementById("section3").appendChild(table);
 }
 
-
 function general(json) {
     function handleFileSelect(evt) {
         const files = evt.target.files;
@@ -294,4 +334,12 @@ function deleteSupermarket() {
     if (confirm("Do you really want to request a deletion of the supermarket via email?")) {
         window.location.href = "mailto:supermarket.comparer@gmail.com";
     }
+}
+
+function addLocation() {
+    const http = new XMLHttpRequest();
+    http.open("GET", "http://localhost:2000/addLocation?countryId=" + document.getElementById("countrySelect").options[document.getElementById("countrySelect").selectedIndex].value + "&address=" + document.getElementById("addressInput").value + "&supermarketId=" + id);
+    http.send();
+    hideLocationOverlay();
+    location.href = location.href;
 }
