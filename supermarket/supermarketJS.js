@@ -54,10 +54,6 @@ function on(name) {
     document.getElementById(name).style.display = "block";
 }
 
-function off(name) {
-    document.getElementById(name).style.display = "none";
-}
-
 function items(prices) {
     let i;
     const col = ["Price", "Name", "Company", "Logo"];
@@ -141,18 +137,18 @@ function locations(locations) {
             }
             else if (col[j] === "Country") {
                 const x = document.createElement("a");
-                x.setAttribute("class", "nav-link");
+                x.setAttribute("class", "nav-link name");
 
                 x.href = "../country/country.html?id=" + locations[i].countryId;
                 x.innerHTML = locations[i].countryName.split("+").join(" ");
-                x.setAttribute("class", "name");
                 tabCell.appendChild(x);
             }
             else if (col[j] === "Address") {
                 tabCell.innerHTML = locations[i].address.split("+").join(" ");
+                tabCell.setAttribute("class", "address");
             }
             else {
-                var editBtn = document.createElement("button");
+                const editBtn = document.createElement("button");
                 editBtn.setAttribute("class", "btn btn-outline-warning");
                 editBtn.innerHTML = "Edit";
                 tabCell.appendChild(editBtn);
@@ -160,19 +156,22 @@ function locations(locations) {
                 editBtn.onclick = edit;
 
                 function edit() {
-                    var before = tr.innerHTML;
-                    var http = new XMLHttpRequest();
+                    const before = tr.innerHTML;
+                    const http = new XMLHttpRequest();
                     http.open("GET", "http://localhost:2000/getCountries");
                     http.send();
                     http.onreadystatechange = function () {
                         if (http.status === 200 && http.readyState === 4) {
 
 
-                            var name = tr.getElementsByClassName("name")[0].innerHTML;
-                            var flag = tr.getElementsByClassName("flag")[0];
+                            const name = tr.getElementsByClassName("name")[0].innerHTML;
+                            const flag = tr.getElementsByClassName("flag")[0];
+                            const address = tr.getElementsByClassName("address")[0].innerHTML;
+
                             let cell = tr.insertCell(-1);
-                            var nameField = document.createElement("input");
+                            const nameField = document.createElement("input");
                             nameField.setAttribute("class", "form-control");
+                            nameField.value = address;
                             cell.appendChild(nameField);
                             tr.innerHTML = "";
                             tr.appendChild(cell);
@@ -180,12 +179,13 @@ function locations(locations) {
 
                             cell = tr.insertCell(-1);
 
-                            var x = document.createElement("select");
+                            const x = document.createElement("select");
                             x.setAttribute("class", "form-control");
                             x.id = "select";
-                            var json2 = JSON.parse(http.responseText);
-                            for (var j = 0; j < json2.length; j++) {
-                                var y = document.createElement("option");
+
+                            const json2 = JSON.parse(http.responseText);
+                            for (let j = 0; j < json2.length; j++) {
+                                const y = document.createElement("option");
                                 y.value = json2[j].id + "::::" + json2[j].flag;
                                 y.innerHTML = json2[j].name;
                                 if (json2[j].name === name) {
@@ -205,19 +205,47 @@ function locations(locations) {
                             cell = tr.insertCell(-1);
                             cell.appendChild(flag);
 
-                            var deleteBtn = document.createElement("button");
+                            const saveBtn = document.createElement("button");
+                            saveBtn.innerHTML = "Save";
+                            saveBtn.setAttribute("class", "btn btn-outline-success");
+                            saveBtn.style.marginRight = "10px";
+                            saveBtn.onclick = function () {
+                                const id = locations[i].id;
+
+                                const h = new XMLHttpRequest();
+                                h.open("GET", "http://localhost:2000/updateLocation?id=" + id + "&countryId=" + x.options[x.selectedIndex].value.split("::::")[0] + "&address=" + nameField.value);
+                                h.send();
+                                window.location = window.location;
+                            };
+
+                            const declineBtn = document.createElement("button");
+                            declineBtn.innerHTML = "Delete Location";
+                            declineBtn.setAttribute("class", "btn btn-outline-warning");
+                            declineBtn.style.marginRight = "10px";
+                            declineBtn.onclick = function () {
+                                tr.innerHTML = before;
+                            };
+
+
+                            const deleteBtn = document.createElement("button");
                             deleteBtn.innerHTML = "Delete Location";
                             deleteBtn.setAttribute("class", "btn btn-outline-danger");
                             deleteBtn.onclick = function () {
-                                var id = locations[i].id;
+                                const id = locations[i].id;
 
-                                var h = new XMLHttpRequest();
+                                const h = new XMLHttpRequest();
                                 h.open("GET", "http://localhost:2000/removeLocation?id=" + id);
                                 h.send();
                                 table.removeChild(tr);
                             };
-                            var c = tr.insertCell(-1);
-                            c.appendChild(deleteBtn);
+
+                            const div = document.createElement("div");
+                            div.appendChild(saveBtn);
+                            div.appendChild(declineBtn);
+                            div.appendChild(deleteBtn);
+
+                            const c = tr.insertCell(-1);
+                            c.appendChild(div);
                         }
                     };
 

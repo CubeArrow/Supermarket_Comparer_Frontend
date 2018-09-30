@@ -134,8 +134,6 @@ function createEverything(json) {
 }
 
 function edit() {
-
-
     const edit = document.getElementById("edit");
     const before = edit.innerHTML;
 
@@ -148,10 +146,15 @@ function edit() {
 
     function apply() {
         const name = document.getElementById("nameInput").value;
+        const description = document.getElementById("descriptionInput").value;
+
 
         edit.innerHTML = before;
         if (!(name === "")) {
             document.getElementById("name").innerHTML = name;
+        }
+        if (!(description === "")) {
+            document.getElementById("description").innerHTML = description;
         }
     }
 
@@ -167,7 +170,8 @@ function edit() {
 
     }
 
-    edit.innerHTML = "<input  id='nameInput' value='" + document.getElementById("name").innerHTML + "' type=\"text\" class=\"form-control\">";
+    edit.innerHTML = "<input  id='nameInput' value='" + document.getElementById("name").innerHTML + "' type=\"text\" class=\"form-control\"> <br>" +
+        "<textarea id='descriptionInput' class='form-control'>" + document.getElementById("description").innerHTML + "</textarea>";
 
 
     edit.appendChild(button);
