@@ -27,9 +27,9 @@ function updateStuff(searchWord){
             const companies = results.companies;
 
 
-            var countriesContainer = document.createElement("div");
+            const countriesContainer = document.createElement("div");
 
-            var h3 = document.createElement("h3");
+            let h3 = document.createElement("h3");
             h3.innerHTML = "Countries";
             countriesContainer.appendChild(h3);
 
@@ -42,9 +42,9 @@ function updateStuff(searchWord){
                 countriesContainer.appendChild(x);
 
             }
-            var companiesContainer = document.createElement("div");
+            const companiesContainer = document.createElement("div");
 
-            var h3 = document.createElement("h3");
+            h3 = document.createElement("h3");
             h3.innerHTML = "Companies";
             companiesContainer.appendChild(h3);
 
@@ -57,9 +57,9 @@ function updateStuff(searchWord){
                 companiesContainer.appendChild(x);
 
             }
-            var supermarketsContainer = document.createElement("div");
+            const supermarketsContainer = document.createElement("div");
 
-            var h3 = document.createElement("h3");
+            h3 = document.createElement("h3");
             h3.innerHTML = "Supermarkets";
             supermarketsContainer.appendChild(h3);
 
@@ -73,9 +73,9 @@ function updateStuff(searchWord){
 
             }
 
-            var itemsContainer = document.createElement("div");
+            const itemsContainer = document.createElement("div");
 
-            var h3 = document.createElement("h3");
+            h3 = document.createElement("h3");
             h3.innerHTML = "Items";
             itemsContainer.appendChild(h3);
 
@@ -102,6 +102,8 @@ function updateStuff(searchWord){
     };
 }
 updateStuff(searchWord);
+
+
 function search(ele) {
     if(event.key === 'Enter') {
         updateStuff(ele.value)

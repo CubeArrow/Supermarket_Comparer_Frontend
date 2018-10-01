@@ -160,7 +160,7 @@ function edit() {
 
     const button2 = document.createElement("button");
     button2.innerHTML = "Decline";
-    button2.setAttribute("class", "btn btn-danger");
+    button2.setAttribute("class", "btn btn-danger");            
     button2.onclick = decline;
     button2.style.marginTop = "10px";
     button2.style.marginLeft = "10px";
