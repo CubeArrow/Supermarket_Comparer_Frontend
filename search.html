@@ -7,6 +7,8 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="baseCSS.css">
     <script rel="script" src="baseJS.js"></script>
+    <script rel="script" src="searchJS.js"></script>
+
 
 </head>
 <body>
@@ -40,8 +42,13 @@
 
 <div class="content">
     <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-4">Search</h1>
+        <div id="container">
+            <div>
+                <label for="input"><h1 class="display-4">Results</h1></label>
+                <input style="width: 200px;" class="form-control" id="input" onkeydown="search(this)">
+            </div>
+            <br>
+            <br>
         </div>
     </div>
 </div>
