@@ -89,13 +89,14 @@ function updateStuff(searchWord){
 
             }
 
-            document.getElementById("container").appendChild(supermarketsContainer);
-            document.getElementById("container").appendChild(document.createElement("br"));
-            document.getElementById("container").appendChild(itemsContainer);
-            document.getElementById("container").appendChild(document.createElement("br"));
-            document.getElementById("container").appendChild(companiesContainer);
-            document.getElementById("container").appendChild(document.createElement("br"));
-            document.getElementById("container").appendChild(countriesContainer);
+            const container = document.getElementById("container");
+            container.appendChild(supermarketsContainer);
+            container.appendChild(document.createElement("br"));
+            container.appendChild(itemsContainer);
+            container.appendChild(document.createElement("br"));
+            container.appendChild(companiesContainer);
+            container.appendChild(document.createElement("br"));
+            container.appendChild(countriesContainer);
 
 
         }

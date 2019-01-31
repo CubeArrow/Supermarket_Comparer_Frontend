@@ -130,7 +130,7 @@ function locations(locations) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Flag") {
                 if (locations[i].flag === "null") {
-                    tabCell.innerHTML = "No logo yet";
+                    tabCell.innerHTML = "No flag yet";
                 } else {
                     tabCell.innerHTML = "<img class='flag' style='height:30px;' src='data:image/png;base64," + locations[i].flag + "'>";
                 }
@@ -213,13 +213,12 @@ function locations(locations) {
                                 const id = locations[i].id;
 
                                 const h = new XMLHttpRequest();
-                                h.open("GET", "http://localhost:2000/updateLocation?id=" + id + "&countryId=" + x.options[x.selectedIndex].value.split("::::")[0] + "&address=" + nameField.value);
+                                h.open("GET", "http://localhost:2000/updateLocation?id=" + id + "&countryId=" + x.value.split("::::")[0] + "&address=" + nameField.value);
                                 h.send();
-                                window.location = window.location;
                             };
 
                             const declineBtn = document.createElement("button");
-                            declineBtn.innerHTML = "Delete Location";
+                            declineBtn.innerHTML = "Remove Edit";
                             declineBtn.setAttribute("class", "btn btn-outline-warning");
                             declineBtn.style.marginRight = "10px";
                             declineBtn.onclick = function () {
@@ -369,5 +368,9 @@ function addLocation() {
     http.open("GET", "http://localhost:2000/addLocation?countryId=" + document.getElementById("countrySelect").options[document.getElementById("countrySelect").selectedIndex].value + "&address=" + document.getElementById("addressInput").value + "&supermarketId=" + id);
     http.send();
     hideLocationOverlay();
-    location.href = location.href;
+    http.onreadystatechange = function(){
+        if(http.readyState === 4){
+            location.href = location.href;
+        }
+    }
 }

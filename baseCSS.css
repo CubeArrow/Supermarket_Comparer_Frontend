@@ -23,6 +23,7 @@ ul.nav-pills {
 }
 .content{
     margin-left: 250px;
+    margin-right: 250px;
 }
 h1{
     margin-top: 50px;
@@ -34,4 +35,3 @@ h1{
 textarea{
     margin-top: 10px;
 }
-

@@ -154,7 +154,7 @@ function edit() {
             document.getElementById("name").innerHTML = name;
         }
         if (!(description === "")) {
-            document.getElementById("description").innerHTML = description;
+            document.getElementById("description").innerHTML = description.split("\n").join("<br>");
         }
     }
 
@@ -171,7 +171,7 @@ function edit() {
     }
 
     edit.innerHTML = "<input  id='nameInput' value='" + document.getElementById("name").innerHTML + "' type=\"text\" class=\"form-control\"> <br>" +
-        "<textarea id='descriptionInput' class='form-control'>" + document.getElementById("description").innerHTML + "</textarea>";
+        "<textarea id='descriptionInput' class='form-control'>" + document.getElementById("description").innerHTML.split("<br>").join("\n") + "</textarea>";
 
 
     edit.appendChild(button);
@@ -179,16 +179,19 @@ function edit() {
 
 
 }
+//const img = document.getElementById("flag").src.split(";base64,")[1];
 
 function save() {
-    if (confirm("Do you really want to save the logo and the name?")) {
+    if (confirm("Do you really want to save the logo, the description and the name?")) {
         const name = document.getElementById("name").innerHTML.split(" ").join("+");
-        const img = document.getElementById("flag").src.split(";base64,")[1];
+        const descr = document.getElementById("description").innerHTML.split(" ").join("+").split("<br>").join("\\n");
 
         const id = location.search.split("?")[1].split("=")[1];
 
         const httprequest = new XMLHttpRequest();
-        httprequest.open("GET", "http://localhost:2000/updateCountry?name=" + name + "&logo=" + img + "&id=" + id);
+        httprequest.open("GET", "http://localhost:2000/updateItem?name=" + name + "&description=" + descr + "&id=" + id);
+        httprequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+
         httprequest.send();
     }
 }
