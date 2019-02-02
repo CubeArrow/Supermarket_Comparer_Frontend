@@ -46,15 +46,13 @@ function items(prices) {
                 x.href = "../supermarket/supermarket.html?id=" + prices[i].supermarketId;
                 x.innerHTML = prices[i].supermarketName.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else if (col[j] === "Logo") {
+            } else if (col[j] === "Logo") {
                 if (prices[i].supermarketLogo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
                     tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + prices[i].supermarketLogo + "'>";
                 }
-            }
-            else {
+            } else {
                 tabCell.innerHTML = prices[i].price;
             }
         }
@@ -105,9 +103,9 @@ function general(json) {
     if (json.description === "null") {
         descr.innerHTML = "No description yet";
     } else {
-        descr.innerHTML = json.description.split("+").join(" ");
+        descr.innerHTML = json.description.split("+").join(" ").split("\\n").join("<br>");
     }
-    var http= new XMLHttpRequest();
+    var http = new XMLHttpRequest();
     http.open("GET", "http://localhost:2000/getItem_Companies");
     http.send();
     http.onreadystatechange = function () {
@@ -117,7 +115,7 @@ function general(json) {
             var x = document.createElement("option");
             x.innerHTML = json.companyName;
             company.appendChild(x);
-            for(var i = 0; i < json2.length; i++){
+            for (var i = 0; i < json2.length; i++) {
                 var y = document.createElement("option");
                 y.value = json2[i].id;
                 y.innerHTML = json2[i].name;
@@ -160,12 +158,12 @@ function edit() {
 
     const button2 = document.createElement("button");
     button2.innerHTML = "Decline";
-    button2.setAttribute("class", "btn btn-danger");            
+    button2.setAttribute("class", "btn btn-danger");
     button2.onclick = decline;
     button2.style.marginTop = "10px";
     button2.style.marginLeft = "10px";
 
-    function decline(){
+    function decline() {
         edit.innerHTML = before;
 
     }
@@ -179,18 +177,19 @@ function edit() {
 
 
 }
+
 //const img = document.getElementById("flag").src.split(";base64,")[1];
 
 function save() {
-    if (confirm("Do you really want to save the logo, the description and the name?")) {
-        const name = document.getElementById("name").innerHTML.split(" ").join("+");
-        const descr = document.getElementById("description").innerHTML.split(" ").join("+").split("<br>").join("\\n");
+    if (confirm("Do you really want to save the description and the name?")) {
+        const name = document.getElementById("name").innerHTML;
+        const descr = document.getElementById("description").innerHTML.split("<br>").join("\\n");
 
         const id = location.search.split("?")[1].split("=")[1];
 
         const httprequest = new XMLHttpRequest();
-        httprequest.open("GET", "http://localhost:2000/updateItem?name=" + name + "&description=" + descr + "&id=" + id);
-        httprequest.setRequestHeader("Access-Control-Allow-Origin", "*");
+        httprequest.open("GET", encodeURI("http://localhost:2000/updateItem?name=" + name + "&description=" + descr + "&id=" + id));
+        httprequest.setRequestHeader("access-control-allow-origin", "*");
 
         httprequest.send();
     }

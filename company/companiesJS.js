@@ -41,19 +41,17 @@ function createTable(jsonObj) {
                 } else {
                     tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "'>";
                 }
-            }
-            else if(col[j] === "Name"){
+            } else if (col[j] === "Name") {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
                 x.href = "company.html?id=" + jsonObj[i].id;
                 x.innerHTML = jsonObj[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else{
+            } else {
                 if (jsonObj[i].description === "null") {
-                    tabCell.innerHTML ="There is no description yet";
-                }else {
+                    tabCell.innerHTML = "There is no description yet";
+                } else {
                     tabCell.innerHTML = jsonObj[i].description.split("+").join(" ");
                 }
             }

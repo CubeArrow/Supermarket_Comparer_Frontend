@@ -45,8 +45,7 @@ function items(prices) {
                 x.href = "../supermarket/supermarket.html?id=" + prices[i].id;
                 x.innerHTML = prices[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else if (col[j] === "Logo") {
+            } else if (col[j] === "Logo") {
                 if (prices[i].logo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
@@ -134,7 +133,7 @@ function edit() {
     button2.style.marginTop = "10px";
     button2.style.marginLeft = "10px";
 
-    function decline(){
+    function decline() {
         edit.innerHTML = before;
 
     }

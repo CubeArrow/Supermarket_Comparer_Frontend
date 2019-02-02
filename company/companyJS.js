@@ -45,8 +45,7 @@ function items(prices) {
                 x.href = "../item/item.html?id=" + prices[i].id;
                 x.innerHTML = prices[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else {
+            } else {
                 tabCell.innerHTML = prices[i].description.split("+").join(" ");
             }
         }
@@ -143,7 +142,7 @@ function edit() {
     button2.style.marginTop = "10px";
     button2.style.marginLeft = "10px";
 
-    function decline(){
+    function decline() {
         edit.innerHTML = before;
 
     }

@@ -81,24 +81,21 @@ function items(prices) {
                 } else {
                     tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + prices[i].logo + "'>";
                 }
-            }
-            else if (col[j] === "Company") {
+            } else if (col[j] === "Company") {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
                 x.href = "../company/company.html?id=" + prices[i].companyId;
                 x.innerHTML = prices[i].company.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else if (col[j] === "Name") {
+            } else if (col[j] === "Name") {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
                 x.href = "../item/item.html?id=" + prices[i].itemId;
                 x.innerHTML = prices[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else {
+            } else {
                 tabCell.innerHTML = prices[i].price;
             }
         }
@@ -134,20 +131,17 @@ function locations(locations) {
                 } else {
                     tabCell.innerHTML = "<img class='flag' style='height:30px;' src='data:image/png;base64," + locations[i].flag + "'>";
                 }
-            }
-            else if (col[j] === "Country") {
+            } else if (col[j] === "Country") {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link name");
 
                 x.href = "../country/country.html?id=" + locations[i].countryId;
                 x.innerHTML = locations[i].countryName.split("+").join(" ");
                 tabCell.appendChild(x);
-            }
-            else if (col[j] === "Address") {
+            } else if (col[j] === "Address") {
                 tabCell.innerHTML = locations[i].address.split("+").join(" ");
                 tabCell.setAttribute("class", "address");
-            }
-            else {
+            } else {
                 const editBtn = document.createElement("button");
                 editBtn.setAttribute("class", "btn btn-outline-warning");
                 editBtn.innerHTML = "Edit";
@@ -368,8 +362,8 @@ function addLocation() {
     http.open("GET", "http://localhost:2000/addLocation?countryId=" + document.getElementById("countrySelect").options[document.getElementById("countrySelect").selectedIndex].value + "&address=" + document.getElementById("addressInput").value + "&supermarketId=" + id);
     http.send();
     hideLocationOverlay();
-    http.onreadystatechange = function(){
-        if(http.readyState === 4){
+    http.onreadystatechange = function () {
+        if (http.readyState === 4) {
             location.href = location.href;
         }
     }

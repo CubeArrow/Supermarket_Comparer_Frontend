@@ -1,6 +1,7 @@
 const url = location.search.split("?");
 const searchWord = url[1].split("=")[1];
-function updateStuff(searchWord){
+
+function updateStuff(searchWord) {
 
 
     const http = new XMLHttpRequest();
@@ -33,7 +34,7 @@ function updateStuff(searchWord){
             h3.innerHTML = "Countries";
             countriesContainer.appendChild(h3);
 
-            for(const i in countries){
+            for (const i in countries) {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
@@ -48,7 +49,7 @@ function updateStuff(searchWord){
             h3.innerHTML = "Companies";
             companiesContainer.appendChild(h3);
 
-            for(const i in companies){
+            for (const i in companies) {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
@@ -63,7 +64,7 @@ function updateStuff(searchWord){
             h3.innerHTML = "Supermarkets";
             supermarketsContainer.appendChild(h3);
 
-            for(const i in supermarkets){
+            for (const i in supermarkets) {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
@@ -79,7 +80,7 @@ function updateStuff(searchWord){
             h3.innerHTML = "Items";
             itemsContainer.appendChild(h3);
 
-            for(const i in items){
+            for (const i in items) {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 
@@ -102,11 +103,12 @@ function updateStuff(searchWord){
         }
     };
 }
+
 updateStuff(searchWord);
 
 
 function search(ele) {
-    if(event.key === 'Enter') {
+    if (event.key === 'Enter') {
         updateStuff(ele.value)
     }
 }

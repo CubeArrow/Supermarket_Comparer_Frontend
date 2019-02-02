@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Company</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="../baseCSS.css">
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" rel="stylesheet">
+    <link href="../baseCSS.css" rel="stylesheet">
     <script rel="script" src="../baseJS.js"></script>
 </head>
 <body>
@@ -13,8 +13,8 @@
 
     <a class="navbar-brand" href="../index.html">Supermarket Comparer</a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+            data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -42,9 +42,9 @@
         </ul>
 
         <form class="form-inline my-2 my-lg-0" id="">
-            <input class="form-control mr-sm-2" id="searchText" type="text" placeholder="Search" aria-label="Search"
-                   onended="search()">
-            <button class="btn btn-outline-success my-2 my-sm-0" type="button" onclick="search()">Search</button>
+            <input aria-label="Search" class="form-control mr-sm-2" id="searchText" onended="search()" placeholder="Search"
+                   type="text">
+            <button class="btn btn-outline-success my-2 my-sm-0" onclick="search()" type="button">Search</button>
         </form>
     </div>
 
@@ -52,16 +52,16 @@
 
 <div class="container" style="position:absolute; z-index: -1">
     <div class="row">
-        <div id="myScrollspy" class="list-group fixed-top">
+        <div class="list-group fixed-top" id="myScrollspy">
             <a class="list-group-item list-group-item-action" href="#section1">Basic</a>
             <a class="list-group-item list-group-item-action" href="#section2">Items</a>
         </div>
 
         <div class="content" style="margin-top: 60px;">
-            <div id="section1" class="row">
+            <div class="row" id="section1">
                 <div class="col">
                     <img id="logo" style="max-width: 20em; max-height: 20em">
-                    <input type="file" id="picker" style="margin-top: 10px;">
+                    <input id="picker" style="margin-top: 10px;" type="file">
                 </div>
                 <div class="col" id="edit">
                     <h1 id="name"></h1>
@@ -76,7 +76,8 @@
                 <h1>Items</h1>
             </div>
 
-            <button id="deleteButton" class="btn btn-outline-danger" onclick="deleteSupermarket()">Delete Company</button>
+            <button class="btn btn-outline-danger" id="deleteButton" onclick="deleteSupermarket()">Delete Company
+            </button>
 
         </div>
     </div>

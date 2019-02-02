@@ -37,8 +37,7 @@ function createTable(jsonObj) {
                 } else {
                     tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].flag + "'>";
                 }
-            }
-            else {
+            } else {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link");
 

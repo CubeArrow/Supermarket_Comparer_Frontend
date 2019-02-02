@@ -4,13 +4,14 @@ httprequest.send();
 httprequest.onreadystatechange = function () {
     if (httprequest.status === 200 && httprequest.readyState === 4) {
         document.getElementById("container").appendChild(createTable(JSON.parse(httprequest.responseText)));
-    document.getElementById("supermarketLogo").addEventListener('change', handleFileSelect, false);
+        document.getElementById("supermarketLogo").addEventListener('change', handleFileSelect, false);
     }
     if (httprequest.status === 404 && httprequest.readyState === 4) {
         document.getElementById("p").innerHTML = JSON.parse(httprequest.responseText).error;
 
     }
 };
+
 function handleFileSelect(evt) {
     const files = evt.target.files;
     let i = 0, f;
@@ -31,7 +32,8 @@ function handleFileSelect(evt) {
 
         // Read in the image file as a data URL.
         reader.readAsDataURL(f);
-    }}
+    }
+}
 
 function createTable(jsonObj) {
     let i;
@@ -60,8 +62,7 @@ function createTable(jsonObj) {
                 } else {
                     tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "'>";
                 }
-            }
-            else {
+            } else {
                 const x = document.createElement("a");
                 x.href = "supermarket.html?id=" + jsonObj[i].id;
                 x.setAttribute("class", "nav-link");
@@ -81,13 +82,11 @@ window.onclick = function () {
 };
 
 
-
-
-function openOverlay(){
+function openOverlay() {
     document.getElementById("addSupermarketOverlay").style.display = "block";
 }
 
-function closeOverlay(){
+function closeOverlay() {
     document.getElementById("addSupermarketOverlay").style.display = "none";
 }
 
@@ -96,12 +95,11 @@ function createNewSupermarket() {
     const logoInput = document.getElementById("logo");
 
 
-
     const httprequest = new XMLHttpRequest();
     httprequest.open("GET", "http://localhost:2000/addSupermarket?name=" + name + "&logo=" + logoInput.src.split(";base64,")[1]);
     httprequest.send();
     httprequest.onreadystatechange = function () {
-        if(httprequest.readyState === 4){
+        if (httprequest.readyState === 4) {
             window.location = window.location;
         }
     }

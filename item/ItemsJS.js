@@ -44,7 +44,7 @@ function createTable(jsonObj) {
                 if (jsonObj[i].logo === "null") {
                     tabCell.innerHTML = "No flag yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "'>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "' alt=''>";
                 }
             } else if (col[j] === "Name") {
                 x = document.createElement("a");
@@ -63,10 +63,18 @@ function createTable(jsonObj) {
             } else {
                 var descr = jsonObj[i].description.split("+").join(" ");
 
-                if(descr === "null")
-                    tabCell.innerHTML = "No description yet"
-                else
-                    tabCell.innerHTML = descr;
+                if (descr === "null")
+                    tabCell.innerHTML = "No description yet";
+                else {
+                    var descr = descr.split("\\n");
+                    if(descr.length > 1) {
+                        tabCell.innerHTML = descr[0] + " [...]";
+                    }
+                    else{
+                        tabCell.innerHTML = descr[0];
+                    }
+
+                }
             }
         }
     }
@@ -105,7 +113,7 @@ function createNewItem() {
     var itemName = document.getElementById("itemName").value;
     var itemDescr = document.getElementById("itemDescription").value;
 
-    if(itemDescr === "")
+    if (itemDescr === "")
         itemDescr = "null";
 
 
