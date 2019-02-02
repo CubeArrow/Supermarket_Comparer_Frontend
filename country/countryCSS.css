@@ -1,0 +1,17 @@
+#flag {
+    max-width: 20em;
+    max-height: 20em;
+}
+
+.container {
+    position: absolute;
+    z-index: -1;
+}
+
+#picker {
+    margin-top: 10px;
+}
+
+.content {
+    margin-top: 60px;
+}

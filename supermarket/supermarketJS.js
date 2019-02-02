@@ -1,14 +1,13 @@
-const httprequest = new XMLHttpRequest;
 const url = location.search.split("?");
 const id = url[1].split("=")[1];
 
-var countries;
-const http = new XMLHttpRequest();
-http.open("GET", "http://localhost:2000/getCountries");
-http.send();
-http.onreadystatechange = function () {
-    if (http.status === 200 && http.readyState === 4) {
-        countries = JSON.parse(http.responseText);
+
+const countryRequest = new XMLHttpRequest();
+countryRequest.open("GET", "http://localhost:2000/getCountries");
+countryRequest.send();
+countryRequest.onreadystatechange = function () {
+    if (countryRequest.status === 200 && countryRequest.readyState === 4) {
+        let countries = JSON.parse(countryRequest.responseText);
         const countrySelect = document.getElementById("countrySelect");
         for (let i = 0; i < countries.length; i++) {
             const x = document.createElement("option");
@@ -20,66 +19,47 @@ http.onreadystatechange = function () {
 };
 
 
-httprequest.open("GET", "http://localhost:2000/getSupermarketById?id=" + id);
-httprequest.send();
-httprequest.onreadystatechange = function () {
-    if (httprequest.status === 200 && httprequest.readyState === 4) {
-        createEverything(JSON.parse(httprequest.responseText));
+const supermarketRequest = new XMLHttpRequest;
+supermarketRequest.open("GET", "http://localhost:2000/getSupermarketById?id=" + id);
+supermarketRequest.send();
+supermarketRequest.onreadystatechange = function () {
+    if (supermarketRequest.status === 200 && supermarketRequest.readyState === 4) {
+        createEverything(JSON.parse(supermarketRequest.responseText));
     }
-    if (httprequest.status === 404 && httprequest.readyState === 4) {
+    if (supermarketRequest.status === 404 && supermarketRequest.readyState === 4) {
         const h = document.createElement("p");
         h.class = "lead";
-        h.innerHTML = JSON.parse(httprequest.responseText).error;
+        h.innerHTML = JSON.parse(supermarketRequest.responseText).error;
         document.getElementById("container").appendChild(h);
 
     }
 };
 
-function showLocationOverlay() {
-    on("locationOverlay");
-}
 
-function hideLocationOverlay() {
-    document.getElementById("locationOverlay").style.display = "none";
-}
-
-window.onclick = function (event) {
-    const overlay = document.getElementById("locationOverlay");
-    if (event.target === overlay) {
-        overlay.style.display = "none";
-    }
-};
-
-function on(name) {
-    document.getElementById(name).style.display = "block";
+function createEverything(json) {
+    general(json);
+    locations(json.locations);
+    items(json.prices);
 }
 
 function items(prices) {
     let i;
     const col = ["Price", "Name", "Company", "Logo"];
 
-    const table = document.createElement("table");
-
-    let tr = table.insertRow(-1);
-
-    for (i = 0; i < col.length; i++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
-
+    const table = createTable(col);
 
     for (i = 0; i < prices.length; i++) {
 
-        tr = table.insertRow(-1);
+        const tr = table.insertRow(-1);
 
         for (let j = 0; j < col.length; j++) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Logo") {
-                if (prices[i].logo === "null") {
+                const logo = prices[i].logo;
+                if (logo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + prices[i].logo + "'>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + logo + "' alt='Logo'>";
                 }
             } else if (col[j] === "Company") {
                 const x = document.createElement("a");
@@ -108,15 +88,7 @@ function items(prices) {
 function locations(locations) {
     const col = ["Address", "Country", "Flag", ""];
 
-    const table = document.createElement("table");
-
-    let tf = table.insertRow(-1);
-
-    for (let z = 0; z < col.length; z++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[z];
-        tf.appendChild(th);
-    }
+    const table = createTable(col);
 
 
     for (let i = 0; i < locations.length; i++) {
@@ -126,10 +98,11 @@ function locations(locations) {
         for (let j = 0; j < col.length; j++) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Flag") {
-                if (locations[i].flag === "null") {
+                const flag = locations[i].flag;
+                if (flag === "null") {
                     tabCell.innerHTML = "No flag yet";
                 } else {
-                    tabCell.innerHTML = "<img class='flag' style='height:30px;' src='data:image/png;base64," + locations[i].flag + "'>";
+                    tabCell.innerHTML = "<img class='flag' style='height:30px;' src='data:image/png;base64," + flag + "' alt='Flag'>";
                 }
             } else if (col[j] === "Country") {
                 const x = document.createElement("a");
@@ -147,104 +120,9 @@ function locations(locations) {
                 editBtn.innerHTML = "Edit";
                 tabCell.appendChild(editBtn);
 
-                editBtn.onclick = edit;
-
-                function edit() {
-                    const before = tr.innerHTML;
-                    const http = new XMLHttpRequest();
-                    http.open("GET", "http://localhost:2000/getCountries");
-                    http.send();
-                    http.onreadystatechange = function () {
-                        if (http.status === 200 && http.readyState === 4) {
-
-
-                            const name = tr.getElementsByClassName("name")[0].innerHTML;
-                            const flag = tr.getElementsByClassName("flag")[0];
-                            const address = tr.getElementsByClassName("address")[0].innerHTML;
-
-                            let cell = tr.insertCell(-1);
-                            const nameField = document.createElement("input");
-                            nameField.setAttribute("class", "form-control");
-                            nameField.value = address;
-                            cell.appendChild(nameField);
-                            tr.innerHTML = "";
-                            tr.appendChild(cell);
-
-
-                            cell = tr.insertCell(-1);
-
-                            const x = document.createElement("select");
-                            x.setAttribute("class", "form-control");
-                            x.id = "select";
-
-                            const json2 = JSON.parse(http.responseText);
-                            for (let j = 0; j < json2.length; j++) {
-                                const y = document.createElement("option");
-                                y.value = json2[j].id + "::::" + json2[j].flag;
-                                y.innerHTML = json2[j].name;
-                                if (json2[j].name === name) {
-                                    y.selected = true;
-                                }
-                                x.appendChild(y);
-
-                            }
-
-                            x.onchange = function () {
-                                flag.src = "data:image/png;base64," + x.options[x.selectedIndex].value.split("::::")[1];
-                            };
-                            cell.appendChild(x);
-                            tr.appendChild(cell);
-
-
-                            cell = tr.insertCell(-1);
-                            cell.appendChild(flag);
-
-                            const saveBtn = document.createElement("button");
-                            saveBtn.innerHTML = "Save";
-                            saveBtn.setAttribute("class", "btn btn-outline-success");
-                            saveBtn.style.marginRight = "10px";
-                            saveBtn.onclick = function () {
-                                const id = locations[i].id;
-
-                                const h = new XMLHttpRequest();
-                                h.open("GET", "http://localhost:2000/updateLocation?id=" + id + "&countryId=" + x.value.split("::::")[0] + "&address=" + nameField.value);
-                                h.send();
-                            };
-
-                            const declineBtn = document.createElement("button");
-                            declineBtn.innerHTML = "Remove Edit";
-                            declineBtn.setAttribute("class", "btn btn-outline-warning");
-                            declineBtn.style.marginRight = "10px";
-                            declineBtn.onclick = function () {
-                                tr.innerHTML = before;
-                            };
-
-
-                            const deleteBtn = document.createElement("button");
-                            deleteBtn.innerHTML = "Delete Location";
-                            deleteBtn.setAttribute("class", "btn btn-outline-danger");
-                            deleteBtn.onclick = function () {
-                                const id = locations[i].id;
-
-                                const h = new XMLHttpRequest();
-                                h.open("GET", "http://localhost:2000/removeLocation?id=" + id);
-                                h.send();
-                                table.removeChild(tr);
-                            };
-
-                            const div = document.createElement("div");
-                            div.appendChild(saveBtn);
-                            div.appendChild(declineBtn);
-                            div.appendChild(deleteBtn);
-
-                            const c = tr.insertCell(-1);
-                            c.appendChild(div);
-                        }
-                    };
-
-
+                editBtn.onclick = function () {
+                    editLocation(table, tr);
                 }
-
             }
 
 
@@ -256,47 +134,140 @@ function locations(locations) {
 }
 
 function general(json) {
-    function handleFileSelect(evt) {
-        const files = evt.target.files;
-
-        let i = 0, f;
-        for (; f = files[i]; i++) {
-
-            if (!f.type.match('image.*')) {
-                continue;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = (function () {
-                return function (e) {
-                    const img = document.getElementById('logo');
-                    img.src = e.target.result;
-                };
-            })(f);
-
-            // Read in the image file as a data URL.
-            reader.readAsDataURL(f);
-        }
-    }
-
-    document.getElementById('picker').addEventListener('change', handleFileSelect, false);
+    const picker = document.getElementById('picker');
+    picker.addEventListener('change', function (evt) {
+        handleFileSelect(evt, "logo");
+    }, false);
 
 
     const img = document.getElementById("logo");
-    if (json.supermarketLogo !== "null") {
-        img.src = "data:image/png;base64," + json.supermarketLogo;
+    const supermarketLogo = json.supermarketLogo;
+    if (supermarketLogo !== "null") {
+        img.src = "data:image/png;base64," + supermarketLogo;
     }
 
     const name = document.getElementById("name");
     name.innerHTML = json.supermarketName;
 }
 
-function createEverything(json) {
-    general(json);
-    locations(json.locations);
-    items(json.prices);
+function editLocation(table, tr) {
+    const before = tr.innerHTML;
+    const http = new XMLHttpRequest();
+    http.open("GET", "http://localhost:2000/getCountries");
+    http.send();
+    http.onreadystatechange = function () {
+        if (http.status === 200 && http.readyState === 4) {
+
+
+            const name = tr.getElementsByClassName("name")[0].innerHTML;
+            const flag = tr.getElementsByClassName("flag")[0];
+            const address = tr.getElementsByClassName("address")[0].innerHTML;
+
+            let cell = tr.insertCell(-1);
+            const nameField = document.createElement("input");
+            nameField.setAttribute("class", "form-control");
+            nameField.value = address;
+            cell.appendChild(nameField);
+            tr.innerHTML = "";
+            tr.appendChild(cell);
+
+
+            cell = tr.insertCell(-1);
+
+            const x = document.createElement("select");
+            x.setAttribute("class", "form-control");
+            x.id = "select";
+
+            const json2 = JSON.parse(http.responseText);
+            for (let j = 0; j < json2.length; j++) {
+                const y = document.createElement("option");
+                y.value = json2[j].id + "::::" + json2[j].flag;
+                y.innerHTML = json2[j].name;
+                if (json2[j].name === name) {
+                    y.selected = true;
+                }
+                x.appendChild(y);
+
+            }
+
+            x.onchange = function () {
+                flag.src = "data:image/png;base64," + x.options[x.selectedIndex].value.split("::::")[1];
+            };
+            cell.appendChild(x);
+            tr.appendChild(cell);
+
+
+            cell = tr.insertCell(-1);
+            cell.appendChild(flag);
+
+            const saveBtn = document.createElement("button");
+            saveBtn.innerHTML = "Save";
+            saveBtn.setAttribute("class", "btn btn-outline-success");
+            saveBtn.style.marginRight = "10px";
+            saveBtn.onclick = function () {
+                const id = locations[i].id;
+
+                const h = new XMLHttpRequest();
+                h.open("GET", "http://localhost:2000/updateLocation?id=" + id + "&countryId=" + x.value.split("::::")[0] + "&address=" + nameField.value);
+                h.send();
+            };
+
+            const declineBtn = document.createElement("button");
+            declineBtn.innerHTML = "Remove Edit";
+            declineBtn.setAttribute("class", "btn btn-outline-warning");
+            declineBtn.style.marginRight = "10px";
+            declineBtn.onclick = function () {
+                tr.innerHTML = before;
+            };
+
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerHTML = "Delete Location";
+            deleteBtn.setAttribute("class", "btn btn-outline-danger");
+            deleteBtn.onclick = function () {
+                const id = locations[i].id;
+
+                const h = new XMLHttpRequest();
+                h.open("GET", "http://localhost:2000/removeLocation?id=" + id);
+                h.send();
+                table.removeChild(tr);
+            };
+
+            const div = document.createElement("div");
+            div.appendChild(saveBtn);
+            div.appendChild(declineBtn);
+            div.appendChild(deleteBtn);
+
+            const c = tr.insertCell(-1);
+            c.appendChild(div);
+        }
+    };
+
+
 }
+
+
+window.onclick = function (event) {
+    closeOverlayOnClick(event, "locationOverlay");
+};
+
+
+function on(name) {
+    document.getElementById(name).style.display = "block";
+}
+
+function off(name) {
+    document.getElementById(name).style.display = "none";
+}
+
+function showLocationOverlay() {
+    on("locationOverlay");
+}
+
+function hideLocationOverlay() {
+    off("locationOverlay")
+}
+
 
 function editName() {
 
@@ -351,12 +322,6 @@ function save() {
     }
 }
 
-function deleteSupermarket() {
-    if (confirm("Do you really want to request a deletion of the supermarket via email?")) {
-        window.location.href = "mailto:supermarket.comparer@gmail.com";
-    }
-}
-
 function addLocation() {
     const http = new XMLHttpRequest();
     http.open("GET", "http://localhost:2000/addLocation?countryId=" + document.getElementById("countrySelect").options[document.getElementById("countrySelect").selectedIndex].value + "&address=" + document.getElementById("addressInput").value + "&supermarketId=" + id);
@@ -364,7 +329,13 @@ function addLocation() {
     hideLocationOverlay();
     http.onreadystatechange = function () {
         if (http.readyState === 4) {
-            location.href = location.href;
+            location.reload();
         }
+    }
+}
+
+function deleteSupermarket() {
+    if (confirm("Do you really want to request a deletion of the supermarket via email?")) {
+        window.location.href = "mailto:supermarket.comparer@gmail.com";
     }
 }

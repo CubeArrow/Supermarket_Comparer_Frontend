@@ -1,21 +1,26 @@
-const httprequest = new XMLHttpRequest;
 const url = location.search.split("?");
 const id = url[1].split("=")[1];
-httprequest.open("GET", "http://localhost:2000/getCountryById?id=" + id);
-httprequest.send();
-httprequest.onreadystatechange = function () {
-    if (httprequest.status === 200 && httprequest.readyState === 4) {
-        createEverything(JSON.parse(httprequest.responseText));
+
+const httpRequest = new XMLHttpRequest;
+httpRequest.open("GET", "http://localhost:2000/getCountryById?id=" + id);
+httpRequest.send();
+httpRequest.onreadystatechange = function () {
+    if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+        createEverything(JSON.parse(httpRequest.responseText));
     }
-    if (httprequest.status === 404 && httprequest.readyState === 4) {
+    if (httpRequest.status === 404 && httpRequest.readyState === 4) {
         const h = document.createElement("p");
         h.class = "lead";
-        h.innerHTML = JSON.parse(httprequest.responseText).error;
+        h.innerHTML = JSON.parse(httpRequest.responseText).error;
         document.getElementById("container").appendChild(h);
 
     }
 };
 
+function createEverything(json) {
+    general(json);
+    items(json.supermarkets);
+}
 
 function items(prices) {
     let i;
@@ -46,10 +51,11 @@ function items(prices) {
                 x.innerHTML = prices[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
             } else if (col[j] === "Logo") {
-                if (prices[i].logo === "null") {
+                const logo = prices[i].logo;
+                if (logo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + prices[i].logo + "'>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + logo + "' alt='Logo'>";
                 }
             }
         }
@@ -59,38 +65,19 @@ function items(prices) {
     document.getElementById("section2").appendChild(table)
 }
 
-
 function general(json) {
-    function handleFileSelect(evt) {
-        const files = evt.target.files;
-
-        let i = 0, f;
-        for (; f = files[i]; i++) {
-
-            if (!f.type.match('image.*')) {
-                continue;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = (function () {
-                return function (e) {
-                    const img = document.getElementById('logo');
-                    img.src = e.target.result;
-                };
-            })(f);
-
-            // Read in the image file as a data URL.
-            reader.readAsDataURL(f);
-        }
-    }
+    const picker = document.getElementById('picker');
+    picker.addEventListener('change', function (evt) {
+        handleFileSelect(evt, "flag");
+    }, false);
 
     document.getElementById('picker').addEventListener('change', handleFileSelect, false);
 
 
-    const img = document.getElementById("logo");
-    if (json.flag !== "null") {
-        img.src = "data:image/png;base64," + json.flag;
+    const img = document.getElementById("flag");
+    const flag = json.flag;
+    if (flag !== "null") {
+        img.src = "data:image/png;base64," + flag;
     }
 
     const name = document.getElementById("name");
@@ -99,10 +86,6 @@ function general(json) {
 
 }
 
-function createEverything(json) {
-    general(json);
-    items(json.supermarkets);
-}
 
 function edit() {
 

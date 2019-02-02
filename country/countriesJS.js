@@ -1,41 +1,34 @@
-const httprequest = new XMLHttpRequest();
-httprequest.open("GET", "http://localhost:2000/getCountries");
-httprequest.send();
-httprequest.onreadystatechange = function () {
-    if (httprequest.status === 200 && httprequest.readyState === 4) {
-        document.getElementById("container").appendChild(createTable(JSON.parse(httprequest.responseText)));
+const httpRequest = new XMLHttpRequest();
+httpRequest.open("GET", "http://localhost:2000/getCountries");
+httpRequest.send();
+httpRequest.onreadystatechange = function () {
+    if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+        document.getElementById("container").appendChild(createCountriesTable(JSON.parse(httpRequest.responseText)));
     }
-    if (httprequest.status === 404 && httprequest.readyState === 4) {
-        document.getElementById("p").innerHTML = JSON.parse(httprequest.responseText).error;
+    if (httpRequest.status === 404 && httpRequest.readyState === 4) {
+        document.getElementById("p").innerHTML = JSON.parse(httpRequest.responseText).error;
     }
 };
 
-function createTable(jsonObj) {
+function createCountriesTable(jsonObj) {
     let i;
     const col = ["Name", "Flag"];
 
-    const table = document.createElement("table");
-
-    let tr = table.insertRow(-1);
-
-    for (i = 0; i < col.length; i++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
+    const table = createTable(col);
 
 
     for (i = 0; i < jsonObj.length; i++) {
 
-        tr = table.insertRow(-1);
+        const tr = table.insertRow(-1);
 
         for (let j = 0; j < col.length; j++) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Flag") {
-                if (jsonObj[i].flag === "null") {
+                const flag = jsonObj[i].flag;
+                if (flag === "null") {
                     tabCell.innerHTML = "No flag yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].flag + "'>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + flag + "' alt='Flag'>";
                 }
             } else {
                 const x = document.createElement("a");

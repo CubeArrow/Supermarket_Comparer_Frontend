@@ -1,45 +1,37 @@
-const httprequest = new XMLHttpRequest();
-httprequest.open("GET", "http://localhost:2000/getItem_Companies");
-httprequest.send();
-httprequest.onreadystatechange = function () {
-    if (httprequest.status === 200 && httprequest.readyState === 4) {
-        document.getElementById("container").appendChild(createTable(JSON.parse(httprequest.responseText)));
+const httpRequest = new XMLHttpRequest();
+httpRequest.open("GET", "http://localhost:2000/getItem_Companies");
+httpRequest.send();
+httpRequest.onreadystatechange = function () {
+    if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+        document.getElementById("container").appendChild(createCompaniesTable(JSON.parse(httpRequest.responseText)));
     }
-    if (httprequest.status === 404 && httprequest.readyState === 4) {
+    if (httpRequest.status === 404 && httpRequest.readyState === 4) {
         const h = document.createElement("p");
         h.class = "lead";
-        h.innerHTML = JSON.parse(httprequest.responseText).error;
+        h.innerHTML = JSON.parse(httpRequest.responseText).error;
         document.getElementById("container").appendChild(h);
 
     }
 };
 
-function createTable(jsonObj) {
+function createCompaniesTable(jsonObj) {
     let i;
     const col = ["Name", "Description", "Logo"];
 
-    const table = document.createElement("table");
-
-    let tr = table.insertRow(-1);
-
-    for (i = 0; i < col.length; i++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
-
+    const table = createTable(col);
 
     for (i = 0; i < jsonObj.length; i++) {
 
-        tr = table.insertRow(-1);
+        const tr = table.insertRow(-1);
 
         for (let j = 0; j < col.length; j++) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Logo") {
-                if (jsonObj[i].logo === "null") {
+                const logo = jsonObj[i].logo;
+                if (logo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "'>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + logo + "' alt='Logo'>";
                 }
             } else if (col[j] === "Name") {
                 const x = document.createElement("a");

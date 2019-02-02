@@ -1,17 +1,18 @@
-const httprequest = new XMLHttpRequest;
 const url = location.search.split("?");
 const id = url[1].split("=")[1];
-httprequest.open("GET", "http://localhost:2000/getPrices?itemId=" + id);
-httprequest.send();
-httprequest.onreadystatechange = function () {
-    if (httprequest.status === 200 && httprequest.readyState === 4) {
-        createEverything(httprequest.responseText);
+
+const httpRequest = new XMLHttpRequest;
+httpRequest.open("GET", "http://localhost:2000/getPrices?itemId=" + id);
+httpRequest.send();
+httpRequest.onreadystatechange = function () {
+    if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+        createEverything(httpRequest.responseText);
     }
 
-    if (httprequest.status === 404 && httprequest.readyState === 4) {
+    if (httpRequest.status === 404 && httpRequest.readyState === 4) {
         const h = document.createElement("p");
         h.class = "lead";
-        h.innerHTML = JSON.parse(httprequest.responseText).error;
+        h.innerHTML = JSON.parse(httpRequest.responseText).error;
         document.getElementById("container").appendChild(h);
 
     }
@@ -47,10 +48,11 @@ function items(prices) {
                 x.innerHTML = prices[i].supermarketName.split("+").join(" ");
                 tabCell.appendChild(x);
             } else if (col[j] === "Logo") {
-                if (prices[i].supermarketLogo === "null") {
+                const supermarketLogo = prices[i].supermarketLogo;
+                if (supermarketLogo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + prices[i].supermarketLogo + "'>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + supermarketLogo + "' alt='Logo'>";
                 }
             } else {
                 tabCell.innerHTML = prices[i].price;
@@ -64,36 +66,15 @@ function items(prices) {
 
 
 function general(json) {
-    function handleFileSelect(evt) {
-        const files = evt.target.files;
-
-        let i = 0, f;
-        for (; f = files[i]; i++) {
-
-            if (!f.type.match('image.*')) {
-                continue;
-            }
-
-            const reader = new FileReader();
-
-            reader.onload = (function () {
-                return function (e) {
-                    const img = document.getElementById('logo');
-                    img.src = e.target.result;
-                };
-            })(f);
-
-            // Read in the image file as a data URL.
-            reader.readAsDataURL(f);
-        }
-    }
-
-    document.getElementById('picker').addEventListener('change', handleFileSelect, false);
-
+    const picker = document.getElementById('picker');
+    picker.addEventListener('change', function (evt) {
+        handleFileSelect(evt, "logo");
+    }, false);
 
     const img = document.getElementById("logo");
-    if (json.companyLogo !== "null") {
-        img.src = "data:image/png;base64," + json.companyLogo;
+    const companyLogo = json.companyLogo;
+    if (companyLogo !== "null") {
+        img.src = "data:image/png;base64," + companyLogo;
     }
 
     const name = document.getElementById("name");
@@ -105,18 +86,22 @@ function general(json) {
     } else {
         descr.innerHTML = json.description.split("+").join(" ").split("\\n").join("<br>");
     }
-    var http = new XMLHttpRequest();
+    getCompaniesInSelect(json);
+}
+
+function getCompaniesInSelect(json) {
+    const http = new XMLHttpRequest();
     http.open("GET", "http://localhost:2000/getItem_Companies");
     http.send();
     http.onreadystatechange = function () {
         if (http.status === 200 && http.readyState === 4) {
-            var json2 = JSON.parse(http.responseText);
-            var company = document.getElementById("company");
-            var x = document.createElement("option");
+            const json2 = JSON.parse(http.responseText);
+            const company = document.getElementById("company");
+            const x = document.createElement("option");
             x.innerHTML = json.companyName;
             company.appendChild(x);
-            for (var i = 0; i < json2.length; i++) {
-                var y = document.createElement("option");
+            for (let i = 0; i < json2.length; i++) {
+                const y = document.createElement("option");
                 y.value = json2[i].id;
                 y.innerHTML = json2[i].name;
                 company.appendChild(y);

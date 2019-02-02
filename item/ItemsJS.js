@@ -1,50 +1,39 @@
-const httprequest = new XMLHttpRequest();
-httprequest.open("GET", "http://localhost:2000/getItems");
-httprequest.send();
-httprequest.onreadystatechange = function () {
-    if (httprequest.status === 200 && httprequest.readyState === 4) {
-        document.getElementById("container").appendChild(createTable(JSON.parse(httprequest.responseText)));
-    } else if (httprequest.status === 404 && httprequest.readyState === 4) {
-        document.getElementById("p").innerHTML = JSON.parse(httprequest.responseText).error;
+const httpRequest = new XMLHttpRequest();
+httpRequest.open("GET", "http://localhost:2000/getItems");
+httpRequest.send();
+httpRequest.onreadystatechange = function () {
+    if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+        document.getElementById("container").appendChild(createItemsTable(JSON.parse(httpRequest.responseText)));
+    } else if (httpRequest.status === 404 && httpRequest.readyState === 4) {
+        document.getElementById("p").innerHTML = JSON.parse(httpRequest.responseText).error;
     }
 };
 
 window.onclick = function (event) {
-    const overlay = document.getElementById("addItemOverlay");
-    if (event.target === overlay) {
-        overlay.style.display = "none";
-    }
+    closeOverlayOnClick(event, "addItemOverlay");
 };
 
 
-function createTable(jsonObj) {
+function createItemsTable(jsonObj) {
     let x;
     let i;
     const col = ["Name", "Description", "Company", "Logo"];
 
-
-    const table = document.createElement("table");
-
-    let tr = table.insertRow(-1);
-
-    for (i = 0; i < col.length; i++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
+    const table = createTable(col);
 
 
     for (i = 0; i < jsonObj.length; i++) {
 
-        tr = table.insertRow(-1);
+        const tr = table.insertRow(-1);
 
         for (let j = 0; j < col.length; j++) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Logo") {
-                if (jsonObj[i].logo === "null") {
+                const logo = jsonObj[i].logo;
+                if (logo === "null") {
                     tabCell.innerHTML = "No flag yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "' alt=''>";
+                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + logo + "' alt='Flag'>";
                 }
             } else if (col[j] === "Name") {
                 x = document.createElement("a");
@@ -61,17 +50,17 @@ function createTable(jsonObj) {
                 x.innerHTML = jsonObj[i].company.split("+").join(" ");
                 tabCell.appendChild(x);
             } else {
-                var descr = jsonObj[i].description.split("+").join(" ");
+                const description = jsonObj[i].description.split("+").join(" ");
 
-                if (descr === "null")
+                if (description === "null")
                     tabCell.innerHTML = "No description yet";
                 else {
-                    var descr = descr.split("\\n");
-                    if(descr.length > 1) {
-                        tabCell.innerHTML = descr[0] + " [...]";
+                    const descriptionArr = description.split("\\n");
+                    if(descriptionArr.length > 1) {
+                        tabCell.innerHTML = descriptionArr[0] + " [...]";
                     }
                     else{
-                        tabCell.innerHTML = descr[0];
+                        tabCell.innerHTML = descriptionArr[0];
                     }
 
                 }
@@ -84,20 +73,20 @@ function createTable(jsonObj) {
 }
 
 function openOverlay() {
-    var overlay = document.getElementById("addItemOverlay");
+    const overlay = document.getElementById("addItemOverlay");
     overlay.style.display = "block";
 
 
-    var http = new XMLHttpRequest();
-    http.open("GET", "http://localhost:2000/getItem_Companies");
-    http.send();
-    http.onreadystatechange = function () {
-        if (http.status === 200 && http.readyState === 4) {
-            var json2 = JSON.parse(http.responseText);
-            var company = document.getElementById("company");
+    const httpRequest = new XMLHttpRequest();
+    httpRequest.open("GET", "http://localhost:2000/getItem_Companies");
+    httpRequest.send();
+    httpRequest.onreadystatechange = function () {
+        if (httpRequest.status === 200 && httpRequest.readyState === 4) {
+            const json2 = JSON.parse(httpRequest.responseText);
+            const company = document.getElementById("company");
 
-            for (var i = 0; i < json2.length; i++) {
-                var y = document.createElement("option");
+            for (let i = 0; i < json2.length; i++) {
+                const y = document.createElement("option");
                 y.value = json2[i].id;
                 y.innerHTML = json2[i].name;
                 company.appendChild(y);
@@ -109,17 +98,17 @@ function openOverlay() {
 
 function createNewItem() {
 
-    var companyId = document.getElementById("company").value;
-    var itemName = document.getElementById("itemName").value;
-    var itemDescr = document.getElementById("itemDescription").value;
+    const companyId = document.getElementById("company").value;
+    const itemName = document.getElementById("itemName").value;
+    let itemDescr = document.getElementById("itemDescription").value;
 
     if (itemDescr === "")
         itemDescr = "null";
 
 
-    var query = "http://localhost:2000/addItem?name=" + itemName + "&description=" + itemDescr + "&companyId=" + companyId;
-    var http = new XMLHttpRequest();
-    http.open("GET", query);
+    const http = new XMLHttpRequest();
+    http.open("GET", "http://localhost:2000/addItem?name=" + itemName + "&description=" + itemDescr +
+        "&companyId=" + companyId);
     http.send();
     http.onreadystatechange = function () {
         if (http.status === 200 && http.readyState === 4) {
@@ -130,5 +119,4 @@ function createNewItem() {
 
 function closeOverlay() {
     document.getElementById("addItemOverlay").style.display = "none";
-
 }
