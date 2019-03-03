@@ -18,12 +18,12 @@
 </head>
 
 <body data-offset="1" data-spy="scroll" data-target="#myScrollspy">
-
 <nav class="navbar navbar-collapse navbar-expand-lg fixed-top navbar-light bg-light">
 
     <a class="navbar-brand" href="../index.html">Supermarket Comparer</a>
 
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
             data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -52,7 +52,8 @@
         </ul>
 
         <form class="form-inline my-2 my-lg-0" id="">
-            <input aria-label="Search" class="form-control mr-sm-2" id="searchText" onended="search()" placeholder="Search"
+            <input aria-label="Search" class="form-control mr-sm-2" id="searchText" onended="search()"
+                   placeholder="Search"
                    type="text">
             <button class="btn btn-outline-success my-2 my-sm-0" onclick="search()" type="button">Search</button>
         </form>
@@ -60,19 +61,20 @@
 
 </nav>
 
-
-<div class="container" style="position:absolute; z-index: -1">
-    <div class="row">
-        <div class="list-group fixed-top" id="myScrollspy">
-            <a class="list-group-item list-group-item-action" href="#section1">Basic</a>
-            <a class="list-group-item list-group-item-action" href="#section2">Items</a>
-            <a class="list-group-item list-group-item-action" href="#section3">Locations</a>
-        </div>
+<main>
+    <div class="container" style="position:absolute; z-index: -1">
+        <aside>
+            <div class="list-group fixed-top" id="myScrollspy">
+                <a class="list-group-item list-group-item-action" href="#section1">Basic</a>
+                <a class="list-group-item list-group-item-action" href="#section2">Items</a>
+                <a class="list-group-item list-group-item-action" href="#section3">Locations</a>
+            </div>
+        </aside>
 
         <div class="content" style="margin-top: 60px;">
-            <div class="row" id="section1">
+            <section class="row" id="section1">
                 <div class="col">
-                    <img id="logo" style="max-width: 20em; max-height: 20em">
+                    <img alt="Logo" id="logo" style="max-width: 20em; max-height: 20em">
                     <input id="picker" style="margin-top: 10px;" type="file">
                 </div>
                 <div class="col" id="edit">
@@ -81,24 +83,28 @@
                     <button class="btn" onclick="save()">Save</button>
 
                 </div>
-            </div>
-            <div id="section2">
+            </section>
+            <section id="section2">
                 <h1>Items</h1>
-            </div>
-            <div id="section3">
+            </section>
+            <section id="section3">
                 <h1>Locations
-                    <button class="btn btn-outline-success" onclick="showLocationOverlay()"><i class="fas fa-plus"></i>
+                    <button class="btn btn-outline-success" onclick="showLocationOverlay()"><i
+                            class="fas fa-plus"></i>
                     </button>
                 </h1>
 
 
-            </div>
-            <button class="btn btn-outline-danger" id="deleteButton" onclick="deleteSupermarket()">Delete Supermarket
+            </section>
+            <button class="btn btn-outline-danger" id="deleteButton" onclick="deleteSupermarket()">Delete
+                Supermarket
             </button>
 
         </div>
     </div>
-</div>
+    </div>
+</main>
+
 
 <div id="locationOverlay">
     <div class="card">

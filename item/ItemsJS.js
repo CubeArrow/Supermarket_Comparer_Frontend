@@ -96,6 +96,10 @@ function openOverlay() {
     };
 }
 
+function closeOverlay() {
+    document.getElementById("addItemOverlay").style.display = "none";
+}
+
 function createNewItem() {
 
     const companyId = document.getElementById("company").value;
@@ -115,8 +119,4 @@ function createNewItem() {
             alert(JSON.parse(http.responseText).result)
         }
     }
-}
-
-function closeOverlay() {
-    document.getElementById("addItemOverlay").style.display = "none";
 }

@@ -4,6 +4,9 @@ httpRequest.send();
 httpRequest.onreadystatechange = function () {
     if (httpRequest.status === 200 && httpRequest.readyState === 4) {
         document.getElementById("container").appendChild(createCompaniesTable(JSON.parse(httpRequest.responseText)));
+        document.getElementById("companyLogo").addEventListener('change', function (event) {
+            handleFileSelect(event, "logo")
+        }, false);
     }
     if (httpRequest.status === 404 && httpRequest.readyState === 4) {
         const h = document.createElement("p");
@@ -54,4 +57,33 @@ function createCompaniesTable(jsonObj) {
     return table;
 }
 
+function createNewCompany() {
+    const companyName = document.getElementById("companyName").value;
+    let companyDescription = document.getElementById("companyDescription").value;
+    const logoInput = document.getElementById("logo");
 
+
+    if (companyDescription === "")
+        companyDescription = "null";
+
+
+    const http = new XMLHttpRequest();
+    http.open("GET", "http://localhost:2000/addItem_company?name=" + companyName + "&description=" + companyDescription
+    + "&logo=" + logoInput.src.split(";base64,")[1]);
+    http.setRequestHeader("Access-Control-Allow-Origin", "*");
+    http.send();
+    http.onreadystatechange = function () {
+        if (http.status === 200 && http.readyState === 4) {
+            alert(JSON.parse(http.responseText).result)
+        }
+    }
+}
+
+function openOverlay() {
+    const overlay = document.getElementById("addCompanyOverlay");
+    overlay.style.display = "block";
+}
+
+function closeOverlay() {
+    document.getElementById("addCompanyOverlay").style.display = "none";
+}

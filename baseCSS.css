@@ -42,3 +42,7 @@ h1 {
 textarea {
     margin-top: 10px;
 }
+
+html {
+    scroll-behavior: smooth;
+}

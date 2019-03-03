@@ -138,7 +138,7 @@ function save() {
         const id = location.search.split("?")[1].split("=")[1];
 
         const httprequest = new XMLHttpRequest();
-        httprequest.open("GET", "http://localhost:2000/updateCountry?name=" + name + "&logo=" + img + "&id=" + id);
+        httprequest.open("GET", "http://localhost:2000/updateCountry?name=" + name + "&flag=" + img + "&id=" + id);
         httprequest.send();
     }
 }

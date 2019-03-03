@@ -66,7 +66,6 @@ function general(json) {
         handleFileSelect(evt, "logo");
     }, false);
 
-    document.getElementById('picker').addEventListener('change', handleFileSelect, false);
 
 
     const img = document.getElementById("logo");
@@ -84,8 +83,6 @@ function general(json) {
     } else {
         descr.innerHTML = json.description.split("+").join(" ");
     }
-
-
 }
 
 

@@ -14,7 +14,8 @@
 
     <a class="navbar-brand" href="../index.html">Supermarket Comparer</a>
 
-    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+    <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
             data-target="#navbarSupportedContent" data-toggle="collapse" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -43,19 +44,22 @@
         </ul>
 
         <form class="form-inline my-2 my-lg-0" id="">
-            <input aria-label="Search" class="form-control mr-sm-2" id="searchText" onended="search()" placeholder="Search"
+            <input aria-label="Search" class="form-control mr-sm-2" id="searchText" onended="search()"
+                   placeholder="Search"
                    type="text">
             <button class="btn btn-outline-success my-2 my-sm-0" onclick="search()" type="button">Search</button>
         </form>
     </div>
 
 </nav>
-<div class="container" style="position:absolute; z-index: -1">
-    <div class="row">
-        <div class="list-group fixed-top" id="myScrollspy">
-            <a class="list-group-item list-group-item-action" href="#section1">Basic</a>
-            <a class="list-group-item list-group-item-action" href="#section2">Prices</a>
-        </div>
+<main>
+    <div class="container" style="position:absolute; z-index: -1">
+        <aside>
+                <div class="list-group fixed-top" id="myScrollspy">
+                    <a class="list-group-item list-group-item-action" href="#section1">Basic</a>
+                    <a class="list-group-item list-group-item-action" href="#section2">Prices</a>
+                </div>
+        </aside>
 
         <div class="content" style="margin-top: 60px;">
             <div class="row" id="section1">
@@ -81,12 +85,14 @@
                 <h1>Prices</h1>
             </div>
 
-            <button class="btn btn-outline-danger" id="deleteButton" onclick="deleteSupermarket()">Delete Supermarket
+            <button class="btn btn-outline-danger" id="deleteButton" onclick="deleteSupermarket()">Delete
+                Supermarket
             </button>
 
         </div>
     </div>
-</div>
+    </div>
+</main>
 </body>
 <script rel="script" src="itemJS.js"></script>
 

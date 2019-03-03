@@ -30,7 +30,7 @@ function createSupermarketTable(jsonObj) {
                 if (jsonObj[i].logo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + jsonObj[i].logo + "' alt='Logo'>";
+                    tabCell.innerHTML = "<img class='logoPreview' src='data:image/png;base64," + jsonObj[i].logo + "' alt='Logo'>";
                 }
             } else {
                 const x = document.createElement("a");
