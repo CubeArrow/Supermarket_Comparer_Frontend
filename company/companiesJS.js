@@ -44,10 +44,18 @@ function createCompaniesTable(jsonObj) {
                 x.innerHTML = jsonObj[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
             } else {
-                if (jsonObj[i].description === "null") {
-                    tabCell.innerHTML = "There is no description yet";
-                } else {
-                    tabCell.innerHTML = jsonObj[i].description.split("+").join(" ");
+                const description = jsonObj[i].description.split("+").join(" ");
+
+
+                if (description === "null")
+                    tabCell.innerHTML = "No description yet";
+                else {
+                    const descriptionArr = description.split("\\n");
+                    if (descriptionArr.length > 1) {
+                        tabCell.innerHTML = descriptionArr[0] + " [...]";
+                    } else {
+                        tabCell.innerHTML = descriptionArr[0];
+                    }
                 }
             }
         }

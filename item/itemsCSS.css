@@ -9,29 +9,17 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9999;
-    -webkit-animation-name: animatetop;
+    -webkit-animation-name: animateTop;
     -webkit-animation-duration: 0.4s;
 }
 
-@-webkit-keyframes animatetop {
-    from {
-        top: -300px;
-        opacity: 0
-    }
-    to {
-        top: 0;
-        opacity: 1
-    }
-}
 
-@keyframes animatetop {
+@keyframes animateTop {
     from {
         top: -300px;
-        opacity: 0
     }
     to {
         top: 0;
-        opacity: 1
     }
 }
 

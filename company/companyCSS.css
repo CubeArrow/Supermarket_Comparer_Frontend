@@ -15,6 +15,30 @@
 .content {
     margin-top: 60px;
 }
-.picker{
+
+.picker {
     margin-top: 10px;
+}
+
+#itemCreationOverlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+}
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+    }
+    to {
+        top: 0;
+    }
 }

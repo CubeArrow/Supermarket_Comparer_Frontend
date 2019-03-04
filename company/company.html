@@ -82,7 +82,9 @@
                 </div>
             </section>
             <div id="section2">
-                <h1>Items</h1>
+                <h1>Items
+                    <button class="btn btn-outline-success" onclick="openItemCreationOverlay()">+</button>
+                </h1>
             </div>
 
             <button class="btn btn-outline-danger" id="deleteButton" onclick="deleteSupermarket()">Delete Company
@@ -91,6 +93,22 @@
         </div>
     </div>
 </main>
+
+<div id="itemCreationOverlay">
+    <!-- TODO-->
+    <div class="jumbotron card">
+        <div class="card-content">
+            <span class="close" onclick="closeItemCreationOverlay()">&times;</span>
+
+            <h2>New Item</h2>
+            <input class="form-control" id="itemName" placeholder="Name">
+            <textarea class="form-control" id="itemDescription" placeholder="Description"></textarea>
+            <br>
+            <button class="btn btn-success" onclick="createItem()">Accept</button>
+            <button class="btn btn-danger" onclick="closeItemCreationOverlay()">Refuse</button>
+        </div>
+    </div>
+</div>
 </body>
 <script rel="script" src="companyJS.js"></script>
 

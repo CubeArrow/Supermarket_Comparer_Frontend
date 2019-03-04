@@ -1,6 +1,7 @@
 const url = location.search.split("?");
 const id = url[1].split("=")[1];
 
+
 const httpRequest = new XMLHttpRequest;
 httpRequest.open("GET", "http://localhost:2000/getPrices?itemId=" + id);
 httpRequest.send();
@@ -65,11 +66,8 @@ function items(prices) {
 }
 
 
+
 function general(json) {
-    const picker = document.getElementById('picker');
-    picker.addEventListener('change', function (evt) {
-        handleFileSelect(evt, "logo");
-    }, false);
 
     const img = document.getElementById("logo");
     const companyLogo = json.companyLogo;
@@ -163,7 +161,6 @@ function edit() {
 
 }
 
-//const img = document.getElementById("flag").src.split(";base64,")[1];
 
 function save() {
     if (confirm("Do you really want to save the description and the name?")) {
@@ -174,8 +171,7 @@ function save() {
 
         const httprequest = new XMLHttpRequest();
         httprequest.open("GET", encodeURI("http://localhost:2000/updateItem?name=" + name + "&description=" + descr + "&id=" + id));
-        httprequest.setRequestHeader("access-control-allow-origin", "*");
-
+        httprequest.setRequestHeader("Access-Control-Allow-Headers", "*");
         httprequest.send();
     }
 }

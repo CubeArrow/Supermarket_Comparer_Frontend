@@ -16,6 +16,9 @@ httpRequest.onreadystatechange = function () {
 
     }
 };
+window.onclick = function (event) {
+    closeOverlayOnClick(event, "itemCreationOverlay");
+};
 
 function createEverything(json) {
     general(json);
@@ -51,7 +54,19 @@ function items(prices) {
                 x.innerHTML = prices[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
             } else {
-                tabCell.innerHTML = prices[i].description.split("+").join(" ");
+                const description = prices[i].description.split("+").join(" ");
+
+
+                if (description === "null")
+                    tabCell.innerHTML = "No description yet";
+                else {
+                    const descriptionArr = description.split("\\n");
+                    if (descriptionArr.length > 1) {
+                        tabCell.innerHTML = descriptionArr[0] + " [...]";
+                    } else {
+                        tabCell.innerHTML = descriptionArr[0];
+                    }
+                }
             }
         }
     }
@@ -65,7 +80,6 @@ function general(json) {
     picker.addEventListener('change', function (evt) {
         handleFileSelect(evt, "logo");
     }, false);
-
 
 
     const img = document.getElementById("logo");
@@ -149,6 +163,31 @@ function save() {
     }
 }
 
+function openItemCreationOverlay() {
+    document.getElementById("itemCreationOverlay").style.display = "block";
+}
+
+function closeItemCreationOverlay() {
+    document.getElementById("itemCreationOverlay").style.display = "none";
+}
+
+function createItem() {
+    const itemName = document.getElementById("itemName").value;
+    const itemDescription = document.getElementById("itemDescription").value;
+
+
+    const request = new XMLHttpRequest();
+    request.open("GET", "http://localhost:2000/addItem?name=" + itemName + "&description=" + itemDescription +
+        "&companyId=" + id);
+    request.send();
+    closeItemCreationOverlay();
+
+    request.onreadystatechange = function () {
+        if (request.status === 200 && request.readyState === 4) {
+            alert(JSON.parse(request.responseText).request)
+        }
+    }
+}
 
 function deleteSupermarket() {
     if (confirm("Do you really want to request a deletion of the supermarket via email?")) {

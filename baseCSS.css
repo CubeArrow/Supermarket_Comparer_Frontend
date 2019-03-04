@@ -46,3 +46,8 @@ textarea {
 html {
     scroll-behavior: smooth;
 }
+.card {
+    width: 40%;
+    margin: 0 auto;
+    top: 50px;
+}
