@@ -126,11 +126,9 @@ function locations(locations) {
             const tabCell = tr.insertCell(-1);
             if (col[j] === "Flag") {
                 const flag = locations[i].flag;
-                if (flag === "null") {
-                    tabCell.innerHTML = "No flag yet";
-                } else {
-                    tabCell.innerHTML = "<img class='flag' style='height:30px;' src='data:image/png;base64," + flag + "' alt='Flag'>";
-                }
+
+                tabCell.innerHTML = "<img class='flag' style='height:30px;' src='data:image/png;base64," + flag + "' alt='No flag yet'>";
+
             } else if (col[j] === "Country") {
                 const x = document.createElement("a");
                 x.setAttribute("class", "nav-link name");
@@ -148,7 +146,7 @@ function locations(locations) {
                 tabCell.appendChild(editBtn);
 
                 editBtn.onclick = function () {
-                    editLocation(table, tr);
+                    editLocation(table, tr, locations, i);
                 }
             }
 
@@ -177,7 +175,7 @@ function general(json) {
     name.innerHTML = json.supermarketName;
 }
 
-function editLocation(table, tr) {
+function editLocation(table, tr, locations, i) {
     const before = tr.innerHTML;
     const http = new XMLHttpRequest();
     http.open("GET", "http://localhost:2000/getCountries");

@@ -10,13 +10,8 @@ httpRequest.onreadystatechange = function () {
         createEverything(httpRequest.responseText);
     }
 
-    if (httpRequest.status === 404 && httpRequest.readyState === 4) {
-        const h = document.createElement("p");
-        h.class = "lead";
-        h.innerHTML = JSON.parse(httpRequest.responseText).error;
-        document.getElementById("container").appendChild(h);
+    handle404Error(httpRequest, document.getElementById("container"));
 
-    }
 };
 
 
@@ -24,15 +19,7 @@ function items(prices) {
     let i;
     const col = ["Price", "Supermarket", "Logo"];
 
-    const table = document.createElement("table");
-
-    let tr = table.insertRow(-1);
-
-    for (i = 0; i < col.length; i++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
+    const table = createTable(col);
 
 
     for (i = 0; i < prices.length; i++) {
@@ -87,6 +74,8 @@ function general(json) {
     getCompaniesInSelect(json);
 }
 
+
+
 function getCompaniesInSelect(json) {
     const http = new XMLHttpRequest();
     http.open("GET", "http://localhost:2000/getItem_Companies");
@@ -98,13 +87,7 @@ function getCompaniesInSelect(json) {
             const x = document.createElement("option");
             x.innerHTML = json.companyName;
             company.appendChild(x);
-            for (let i = 0; i < json2.length; i++) {
-                const y = document.createElement("option");
-                y.value = json2[i].id;
-                y.innerHTML = json2[i].name;
-                company.appendChild(y);
-
-            }
+            generateOptions(json2, company);
         }
     };
 }

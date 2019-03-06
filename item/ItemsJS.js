@@ -50,20 +50,7 @@ function createItemsTable(jsonObj) {
                 x.innerHTML = jsonObj[i].company.split("+").join(" ");
                 tabCell.appendChild(x);
             } else {
-                const description = jsonObj[i].description.split("+").join(" ");
-
-                if (description === "null")
-                    tabCell.innerHTML = "No description yet";
-                else {
-                    const descriptionArr = description.split("\\n");
-                    if(descriptionArr.length > 1) {
-                        tabCell.innerHTML = descriptionArr[0] + " [...]";
-                    }
-                    else{
-                        tabCell.innerHTML = descriptionArr[0];
-                    }
-
-                }
+                displayDescriptionFromJsonInTabCell(jsonObj, i, tabCell)
             }
         }
     }
@@ -85,13 +72,7 @@ function openOverlay() {
             const json2 = JSON.parse(httpRequest.responseText);
             const company = document.getElementById("company");
 
-            for (let i = 0; i < json2.length; i++) {
-                const y = document.createElement("option");
-                y.value = json2[i].id;
-                y.innerHTML = json2[i].name;
-                company.appendChild(y);
-
-            }
+            generateOptions(json2, company)
         }
     };
 }

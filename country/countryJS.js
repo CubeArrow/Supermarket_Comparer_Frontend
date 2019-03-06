@@ -8,13 +8,7 @@ httpRequest.onreadystatechange = function () {
     if (httpRequest.status === 200 && httpRequest.readyState === 4) {
         createEverything(JSON.parse(httpRequest.responseText));
     }
-    if (httpRequest.status === 404 && httpRequest.readyState === 4) {
-        const h = document.createElement("p");
-        h.class = "lead";
-        h.innerHTML = JSON.parse(httpRequest.responseText).error;
-        document.getElementById("container").appendChild(h);
-
-    }
+    handle404Error(httpRequest, document.getElementById("container"));
 };
 
 function createEverything(json) {
@@ -26,15 +20,8 @@ function items(prices) {
     let i;
     const col = ["Name", "Logo"];
 
-    const table = document.createElement("table");
+    const table = createTable(col);
 
-    let tr = table.insertRow(-1);
-
-    for (i = 0; i < col.length; i++) {
-        const th = document.createElement("th");
-        th.innerHTML = col[i];
-        tr.appendChild(th);
-    }
 
 
     for (i = 0; i < prices.length; i++) {
