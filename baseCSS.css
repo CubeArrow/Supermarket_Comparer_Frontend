@@ -2,6 +2,37 @@ nav {
     margin-bottom: 5px;
 }
 
+.overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 150%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+}
+
+@-webkit-keyframes animatetop {
+    from {
+        top: -300px;
+    }
+    to {
+        top: 0;
+    }
+}
+
+.card {
+    width: 40%;
+    margin: 0 auto;
+    top: 50px;
+}
+
+
 .nav-link {
     color: gray;
     text-decoration: none;
@@ -29,6 +60,7 @@ ul.nav-pills {
 .content {
     margin-left: 250px;
     margin-right: 250px;
+    margin-top: 60px;
 }
 
 h1 {

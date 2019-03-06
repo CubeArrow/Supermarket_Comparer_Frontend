@@ -42,3 +42,7 @@ function closeOverlayOnClick(event, name) {
         overlay.style.display = "none";
     }
 }
+
+function sendHttpReqest(httpRequest, url){
+
+}

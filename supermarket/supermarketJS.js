@@ -1,44 +1,71 @@
+//Get the arguments from the url
 const url = location.search.split("?");
 const id = url[1].split("=")[1];
 
 
-const countryRequest = new XMLHttpRequest();
-countryRequest.open("GET", "http://localhost:2000/getCountries");
-countryRequest.send();
-countryRequest.onreadystatechange = function () {
-    if (countryRequest.status === 200 && countryRequest.readyState === 4) {
-        let countries = JSON.parse(countryRequest.responseText);
-        const countrySelect = document.getElementById("countrySelect");
-        for (let i = 0; i < countries.length; i++) {
-            const x = document.createElement("option");
-            x.value = countries[i].id;
-            x.innerHTML = countries[i].name;
-            countrySelect.appendChild(x);
-        }
-    }
-};
-
-
+//Get the data about the supermarket from the backend and set it to the different sections on the website
 const supermarketRequest = new XMLHttpRequest;
 supermarketRequest.open("GET", "http://localhost:2000/getSupermarketById?id=" + id);
 supermarketRequest.send();
 supermarketRequest.onreadystatechange = function () {
     if (supermarketRequest.status === 200 && supermarketRequest.readyState === 4) {
+        //set the data to the different sections of the website
         createEverything(JSON.parse(supermarketRequest.responseText));
     }
     if (supermarketRequest.status === 404 && supermarketRequest.readyState === 4) {
+        //Display the 404 error if it occurs.
         const h = document.createElement("p");
         h.class = "lead";
         h.innerHTML = JSON.parse(supermarketRequest.responseText).error;
         document.getElementById("container").appendChild(h);
+    }
+};
+
+//Get all of the countries in order to create options for the country select in the location creation overlay
+const countryRequest = new XMLHttpRequest();
+countryRequest.open("GET", "http://localhost:2000/getCountries");
+countryRequest.send();
+countryRequest.onreadystatechange = function () {
+    if (countryRequest.status === 200 && countryRequest.readyState === 4) {
+        //Create an option for the select and add it to the select
+        addDataToSelect(countryRequest.responseText, "countrySelect")
 
     }
 };
 
+//Get all of the companies in order to add them as options to the select in the company creation overlay
+const companyRequest = new XMLHttpRequest();
+companyRequest.open("GET", "http://localhost:2000/getItem_Companies");
+companyRequest.send();
+companyRequest.onreadystatechange = function () {
+    if (companyRequest.status === 200 && companyRequest.readyState === 4) {
+        //Create the options and add them to the select
+        addDataToSelect(companyRequest.responseText, "companySelect")
+    }
+};
+
+function addDataToSelect(data, selectionName) {
+    //Convert the data to a JSON Array
+    let company = JSON.parse(data);
+
+    const companySelect = document.getElementById(selectionName);
+    //Iterate over the items in the JSON Array
+    for (let i = 0; i < company.length; i++) {
+        //Create the option and set the variables
+        const x = document.createElement("option");
+        x.value = company[i].id;
+        x.innerHTML = company[i].name;
+        //Add the option to the selection element
+        companySelect.appendChild(x);
+    }
+}
 
 function createEverything(json) {
+    //Display the general data in the first section
     general(json);
+    //Display the data with the locations in the second section
     locations(json.locations);
+    //Display the data with the prices for different items in the third section
     items(json.prices);
 }
 
@@ -249,14 +276,17 @@ function editLocation(table, tr) {
 
 window.onclick = function (event) {
     closeOverlayOnClick(event, "locationOverlay");
+    closeOverlayOnClick(event, "itemOverlay");
 };
 
 
 function on(name) {
+    //Set the display to block in order to show it
     document.getElementById(name).style.display = "block";
 }
 
 function off(name) {
+    //Set the display to block in order to hide it
     document.getElementById(name).style.display = "none";
 }
 
@@ -266,6 +296,16 @@ function showLocationOverlay() {
 
 function hideLocationOverlay() {
     off("locationOverlay")
+}
+
+function showItemOverlay() {
+    //Open the overlay for the item overlay
+    on("itemOverlay");
+}
+
+function hideItemOverlay() {
+    //Close the overlay for the item overlay
+    off("itemOverlay")
 }
 
 
@@ -324,7 +364,7 @@ function save() {
 
 function addLocation() {
     const http = new XMLHttpRequest();
-    http.open("GET", "http://localhost:2000/addLocation?countryId=" + document.getElementById("countrySelect").options[document.getElementById("countrySelect").selectedIndex].value + "&address=" + document.getElementById("addressInput").value + "&supermarketId=" + id);
+    http.open("GET", "http://localhost:2000/addLocation?countryId=" + document.getElementById("countrySelect").value + "&address=" + document.getElementById("addressInput").value + "&supermarketId=" + id);
     http.send();
     hideLocationOverlay();
     http.onreadystatechange = function () {
@@ -333,6 +373,34 @@ function addLocation() {
         }
     }
 }
+
+function addItem() {
+    const http = new XMLHttpRequest();
+    http.open("GET", "http://localhost:2000/addPrice?supermarketId=" + id + "&itemId=" + document.getElementById("itemSelect").value + "&price=" + document.getElementById("priceInput").value);
+    http.send();
+    hideItemOverlay();
+    http.onreadystatechange = function () {
+        if (http.readyState === 4) {
+            location.reload();
+        }
+    }
+}
+
+function handleCompanySelect(obj) {
+    document.getElementById("itemSelect").innerHTML = "";
+
+    console.log(obj.value);
+    const request = new XMLHttpRequest;
+    request.open("GET", "http://localhost:2000/getItemsByCompanyId?id=" + obj.value);
+    request.send();
+    request.onreadystatechange = function () {
+        if (request.status === 200 && request.readyState === 4) {
+            console.log(request.responseText);
+            addDataToSelect(request.responseText, "itemSelect");
+        }
+    };
+}
+
 
 function deleteSupermarket() {
     if (confirm("Do you really want to request a deletion of the supermarket via email?")) {
