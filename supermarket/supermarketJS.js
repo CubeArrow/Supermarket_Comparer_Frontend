@@ -70,12 +70,11 @@ function createEverything(json) {
 }
 
 function items(prices) {
-    let i;
-    const col = ["Price", "Name", "Company", "Logo"];
+    const col = ["Price", "Name", "Company", "Logo", ""];
 
     const table = createTable(col);
 
-    for (i = 0; i < prices.length; i++) {
+    for (let i = 0; i < prices.length; i++) {
 
         const tr = table.insertRow(-1);
 
@@ -86,24 +85,37 @@ function items(prices) {
                 if (logo === "null") {
                     tabCell.innerHTML = "No logo yet";
                 } else {
-                    tabCell.innerHTML = "<img style='height:30px;' src='data:image/png;base64," + logo + "' alt='Logo'>";
+                    tabCell.innerHTML = "<img class='logo' style='height:30px;' src='data:image/png;base64," + logo + "' alt='Logo'>";
                 }
             } else if (col[j] === "Company") {
                 const x = document.createElement("a");
-                x.setAttribute("class", "nav-link");
+                x.setAttribute("class", "nav-link company");
 
                 x.href = "../company/company.html?id=" + prices[i].companyId;
                 x.innerHTML = prices[i].company.split("+").join(" ");
+                x.value = prices[i].companyId;
                 tabCell.appendChild(x);
             } else if (col[j] === "Name") {
                 const x = document.createElement("a");
-                x.setAttribute("class", "nav-link");
+                x.setAttribute("class", "nav-link name");
 
                 x.href = "../item/item.html?id=" + prices[i].itemId;
                 x.innerHTML = prices[i].name.split("+").join(" ");
                 tabCell.appendChild(x);
-            } else {
-                tabCell.innerHTML = prices[i].price;
+            } else  if (col[j] === "Price"){
+                const x = document.createElement("p");
+                x.setAttribute("class", "price");
+                x.innerHTML = prices[i].price;
+                tabCell.appendChild(x);
+            } else{
+                const editBtn = document.createElement("button");
+                editBtn.setAttribute("class", "btn btn-outline-warning");
+                editBtn.innerHTML = "Edit";
+                tabCell.appendChild(editBtn);
+
+                editBtn.onclick = function () {
+                    editPrice(table, tr, prices, i);
+                }
             }
         }
     }
@@ -175,6 +187,77 @@ function general(json) {
     name.innerHTML = json.supermarketName;
 }
 
+function editPrice(table, tr, prices, i) {
+    const before = tr.innerHTML;
+
+    const price = tr.getElementsByClassName("price")[0].innerHTML;
+    const name = tr.getElementsByClassName("name")[0];
+    const company = tr.getElementsByClassName("company")[0];
+    const logo = tr.getElementsByClassName("logo")[0];
+
+    let cell = tr.insertCell(-1);
+    const priceField = document.createElement("input");
+    priceField.setAttribute("class", "form-control");
+    priceField.value = price;
+    cell.appendChild(priceField);
+    tr.innerHTML = "";
+    tr.appendChild(cell);
+
+    cell = tr.insertCell(-1);
+    cell.appendChild(name);
+    tr.appendChild(cell);
+    cell = tr.insertCell(-1);
+    cell.appendChild(company);
+    tr.appendChild(cell);
+    cell = tr.insertCell(-1);
+    cell.appendChild(logo);
+    tr.appendChild(cell);
+
+
+    const saveBtn = document.createElement("button");
+    saveBtn.innerHTML = "Save";
+    saveBtn.setAttribute("class", "btn btn-outline-success");
+    saveBtn.style.marginRight = "10px";
+    saveBtn.onclick = function () {
+        console.log(prices);
+        console.log(i);
+        const id = prices[i].id;
+
+        const h = new XMLHttpRequest();
+        h.open("GET", "http://localhost:2000/updatePrice?id=" + id + "&price=" + priceField.value);
+        h.send();
+    };
+
+    const declineBtn = document.createElement("button");
+    declineBtn.innerHTML = "Cancel Edit";
+    declineBtn.setAttribute("class", "btn btn-outline-warning");
+    declineBtn.style.marginRight = "10px";
+    declineBtn.onclick = function () {
+        tr.innerHTML = before;
+    };
+
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.innerHTML = "Delete Location";
+    deleteBtn.setAttribute("class", "btn btn-outline-danger");
+    deleteBtn.onclick = function () {
+        const id = prices[i].id;
+
+        const h = new XMLHttpRequest();
+        h.open("GET", "http://localhost:2000/removePrice?id=" + id);
+        h.send();
+        table.removeChild(tr);
+    };
+
+    const div = document.createElement("div");
+    div.appendChild(saveBtn);
+    div.appendChild(declineBtn);
+    div.appendChild(deleteBtn);
+
+    const c = tr.insertCell(-1);
+    c.appendChild(div);
+}
+
 function editLocation(table, tr, locations, i) {
     const before = tr.innerHTML;
     const http = new XMLHttpRequest();
@@ -182,7 +265,6 @@ function editLocation(table, tr, locations, i) {
     http.send();
     http.onreadystatechange = function () {
         if (http.status === 200 && http.readyState === 4) {
-
 
             const name = tr.getElementsByClassName("name")[0].innerHTML;
             const flag = tr.getElementsByClassName("flag")[0];
@@ -238,7 +320,7 @@ function editLocation(table, tr, locations, i) {
             };
 
             const declineBtn = document.createElement("button");
-            declineBtn.innerHTML = "Remove Edit";
+            declineBtn.innerHTML = "Cancel Edit";
             declineBtn.setAttribute("class", "btn btn-outline-warning");
             declineBtn.style.marginRight = "10px";
             declineBtn.onclick = function () {
@@ -308,7 +390,6 @@ function hideItemOverlay() {
 
 
 function editName() {
-
     const edit = document.getElementById("edit");
     const before = edit.innerHTML;
 
