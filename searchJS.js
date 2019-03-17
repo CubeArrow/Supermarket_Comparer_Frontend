@@ -1,8 +1,7 @@
 const url = location.search.split("?");
 const searchWord = url[1].split("=")[1];
 
-function updateStuff(searchWord) {
-
+function updateSearchResults(searchWord) {
 
     const http = new XMLHttpRequest();
     http.open("GET", "http://localhost:2000/search?searchWord=" + searchWord);
@@ -14,7 +13,7 @@ function updateStuff(searchWord) {
 
             document.getElementById("container").innerHTML = "<div>\n" +
                 "                <label for=\"input\"><h1 class=\"display-4\">Results</h1></label>\n" +
-                "                <input style=\"width: 200px;\" class=\"form-control\" id=\"input\" onkeydown=\"search(this)\">\n" +
+                "                <input style=\"width: 200px;\" class=\"form-control\" id=\"input\" onkeydown=\"search(event)\">\n" +
                 "            </div>\n" +
                 "            <br>\n" +
                 "            <br>";
@@ -99,16 +98,18 @@ function updateStuff(searchWord) {
             container.appendChild(document.createElement("br"));
             container.appendChild(countriesContainer);
 
+            document.getElementById("input").value = searchWord;
 
         }
     };
 }
 
-updateStuff(searchWord);
+updateSearchResults(searchWord);
 
 
-function search(ele) {
-    if (event.key === 'Enter') {
-        updateStuff(ele.value)
+function search(e) {
+    if(e.key === 13 || e.which === 13) {
+        const searchButton = document.getElementById("input");
+        updateSearchResults(searchButton.value);
     }
 }
