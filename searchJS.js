@@ -108,7 +108,7 @@ updateSearchResults(searchWord);
 
 
 function search(e) {
-    if(e.key === 13 || e.which === 13) {
+    if(e.key === "Enter" || e.which === 13) {
         const searchButton = document.getElementById("input");
         updateSearchResults(searchButton.value);
     }
