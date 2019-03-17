@@ -238,7 +238,7 @@ function editPrice(table, tr, prices, i) {
 
 
     const deleteBtn = document.createElement("button");
-    deleteBtn.innerHTML = "Delete Location";
+    deleteBtn.innerHTML = "Delete Price";
     deleteBtn.setAttribute("class", "btn btn-outline-danger");
     deleteBtn.onclick = function () {
         const id = prices[i].id;
